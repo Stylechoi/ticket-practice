@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>티켓팅 훈련소</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo">티켓팅 훈련소</div>
+    <div id="server-time"></div>
+    <button id="logout-btn" style="display:none;">로그아웃</button>
+  </header>
+  <main>
+    <div id="login-modal" class="modal show">
+      <div class="modal-content">
+        <h2>로그인</h2>
+        <input id="login-id" placeholder="아이디">
+        <input id="login-pw" type="password" placeholder="비밀번호">
+        <button id="login-btn">로그인</button>
+      </div>
+    </div>
+    <section class="card" id="main-section" style="display:none;">
+      <div id="zones"></div>
+      <div id="timer"></div>
+      <div id="selected-seat"></div>
+      <button id="buy-btn" disabled>티켓 구매</button>
+      <div id="history"></div>
+      <button id="clear-history-btn" class="danger">기록 전체 삭제</button>
+    </section>
+    <div id="pay-modal" class="modal">
+      <div class="modal-content">
+        <h2>결제창</h2>
+        <input id="pay-name" placeholder="이름">
+        <input id="pay-card" placeholder="카드번호">
+        <div id="pay-timer"></div>
+        <button id="pay-btn">결제하기</button>
+      </div>
+    </div>
+  </main>
+  <footer>
+    &copy; 2025 티켓팅 훈련소
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 | 티켓팅 훈련소</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 60px auto 0 auto;
+      background: #232526;
+      border-radius: 12px;
+      padding: 32px 24px 24px 24px;
+      box-shadow: 0 2px 12px #0002;
+    }
+    .login-container h2 {
+      color: #3cff8f;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .login-container label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #181a1b;
+      color: #fff;
+      margin-bottom: 8px;
+      font-size: 1em;
+    }
+    .login-container button {
+      width: 100%;
+      background: #3cff8f;
+      color: #181a1b;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 0;
+      font-size: 1.1em;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .login-container .switch {
+      margin-top: 16px;
+      text-align: center;
+      color: #aaa;
+      font-size: 0.98em;
+    }
+    .login-container .error {
+      color: #ff4d4d;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .login-container .success {
+      color: #3cff8f;
+      margin-top: 8px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2 id="form-title">로그인</h2>
+    <form id="login-form">
+      <label for="username">아이디</label>
+      <input type="text" id="username" required autocomplete="username">
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" required autocomplete="current-password">
+      <button type="submit" id="login-btn">로그인</button>
+      <div class="error" id="login-error"></div>
+    </form>
+    <form id="register-form" style="display:none;">
+      <label for="reg-username">아이디</label>
+      <input type="text" id="reg-username" required autocomplete="username">
+      <label for="reg-password">비밀번호</label>
+      <input type="password" id="reg-password" required autocomplete="new-password">
+      <button type="submit" id="register-btn">회원가입</button>
+      <div class="error" id="register-error"></div>
+      <div class="success" id="register-success"></div>
+    </form>
+    <div class="switch">
+      <span id="switch-to-register">회원가입</span> | <span id="switch-to-login" style="display:none;">로그인</span>
+    </div>
+  </div>
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const switchToRegister = document.getElementById('switch-to-register');
+    const switchToLogin = document.getElementById('switch-to-login');
+    const formTitle = document.getElementById('form-title');
+    switchToRegister.onclick = () => {
+      loginForm.style.display = 'none';
+      registerForm.style.display = '';
+      switchToRegister.style.display = 'none';
+      switchToLogin.style.display = '';
+      formTitle.textContent = '회원가입';
+    };
+    switchToLogin.onclick = () => {
+      loginForm.style.display = '';
+      registerForm.style.display = 'none';
+      switchToRegister.style.display = '';
+      switchToLogin.style.display = 'none';
+      formTitle.textContent = '로그인';
+    };
+    loginForm.onsubmit = async e => {
+      e.preventDefault();
+      document.getElementById('login-error').textContent = '';
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('username', data.username);
+          window.location.href = 'index.html';
+        } else {
+          document.getElementById('login-error').textContent = data.message || '로그인 실패';
+        }
+      } catch {
+        document.getElementById('login-error').textContent = '서버 오류가 발생했습니다.';
+      }
+    };
+    registerForm.onsubmit = async e => {
+      e.preventDefault();
+      document.getElementById('register-error').textContent = '';
+      document.getElementById('register-success').textContent = '';
+      const username = document.getElementById('reg-username').value.trim();
+      const password = document.getElementById('reg-password').value;
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          document.getElementById('register-success').textContent = '회원가입 성공! 이제 로그인하세요.';
+        } else {
+          document.getElementById('register-error').textContent = data.message || '회원가입 실패';
+        }
+      } catch {
+        document.getElementById('register-error').textContent = '서버 오류가 발생했습니다.';
+      }
+    };
+  </script>
+</body>
+</html> 
