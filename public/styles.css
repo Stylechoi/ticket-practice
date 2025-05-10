@@ -1,7 +1,7 @@
 html, body { min-height: 100vh; }
 body {
   background: #181a1b;
-  color: #222;
+  color: #f5f6fa;
   font-family: 'Pretendard', 'Noto Sans KR', Arial, sans-serif;
   margin: 0;
 }
@@ -12,6 +12,7 @@ header {
   padding: 32px 48px 0 48px;
   background: #181a1b;
   min-height: 80px;
+  color: #3cff8f;
 }
 .logo {
   font-size: 2.2em;
@@ -87,30 +88,33 @@ main {
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  background: #fff;
+  background: #232526;
   border: 2px solid #3cff8f;
+  color: #fff;
   cursor: pointer;
   transition: background 0.2s, border 0.2s;
 }
 .seat.sold {
-  background: #bdbdbd;
+  background: #444;
   border-color: #888;
+  color: #888;
   cursor: not-allowed;
 }
 .seat.selected {
   background: #3cff8f;
   border-color: #1fae5b;
+  color: #181a1b;
 }
 #timer, #pay-timer {
-  font-size: 1.3em;
+  font-size: 1.2em;
   margin: 24px 0 12px 0;
   color: #1fae5b;
   text-align: center;
 }
 #selected-seat {
   margin: 16px 0;
-  font-size: 1.2em;
-  color: #222;
+  font-size: 1.1em;
+  color: #fff;
 }
 button {
   background: #3cff8f;
@@ -119,12 +123,13 @@ button {
   border-radius: 8px;
   padding: 12px 28px;
   font-size: 1.1em;
-  margin: 12px 0;
+  margin: 10px 0;
   cursor: pointer;
   transition: background 0.2s;
+  font-weight: 600;
 }
 button:disabled {
-  background: #bdbdbd;
+  background: #444;
   color: #888;
   cursor: not-allowed;
 }
@@ -137,15 +142,17 @@ button.danger {
   margin-top: 32px;
   width: 100%;
   max-width: 600px;
+  color: #fff;
 }
 #history ul {
   padding-left: 18px;
 }
 #history li {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: #f5f6fa;
 }
 .delete-history {
   background: none;
@@ -169,6 +176,7 @@ button.danger {
 }
 .modal-content {
   background: #232526;
+  color: #fff;
   padding: 40px 32px;
   border-radius: 18px;
   min-width: 320px;
@@ -177,13 +185,33 @@ button.danger {
   gap: 18px;
   box-shadow: 0 4px 24px #0003;
 }
-input {
+.modal-content h2 {
+  color: #3cff8f;
+  font-size: 1.4em;
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: -1px;
+}
+.modal-content input {
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid #bdbdbd;
-  background: #f7f7f7;
-  color: #222;
+  border: 1px solid #3cff8f;
+  background: #181a1b;
+  color: #fff;
   font-size: 1em;
+  margin-bottom: 8px;
+}
+.modal-content button {
+  background: #3cff8f;
+  color: #181a1b;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.1em;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
 }
 footer {
   position: fixed;
@@ -197,8 +225,86 @@ footer {
   z-index: 1;
 }
 @media (max-width: 900px) {
-  #zones { gap: 16px; }
-  .seats { grid-template-columns: repeat(5, 28px); gap: 4px; }
-  .seat { width: 28px; height: 28px; }
-  .modal-content { min-width: 200px; padding: 18px 8px; }
+  header {
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 2vw 0 2vw;
+    min-height: 60px;
+  }
+  .logo {
+    font-size: 1.5em;
+  }
+  #server-time {
+    font-size: 1em;
+    top: 18px;
+    min-width: 120px;
+  }
+  #logout-btn {
+    padding: 8px 14px;
+    font-size: 1em;
+    margin-left: 0;
+    margin-top: 6px;
+  }
+  main {
+    padding-bottom: 80px;
+  }
+  #main-section {
+    width: 100vw;
+    padding: 0 2vw;
+  }
+  #zones {
+    flex-direction: column;
+    gap: 18px;
+    margin: 18px 0 12px 0;
+    width: 100%;
+    align-items: center;
+  }
+  .zone b {
+    font-size: 1em;
+    margin-bottom: 4px;
+  }
+  .seats {
+    grid-template-columns: repeat(5, 36px);
+    gap: 6px;
+  }
+  .seat {
+    width: 36px;
+    height: 36px;
+    border-radius: 7px;
+    font-size: 1em;
+  }
+  #timer, #pay-timer {
+    font-size: 1.1em;
+    margin: 16px 0 8px 0;
+  }
+  #selected-seat {
+    margin: 10px 0;
+    font-size: 1em;
+  }
+  button {
+    padding: 10px 18px;
+    font-size: 1em;
+    margin: 10px 0;
+    border-radius: 7px;
+  }
+  #history {
+    margin-top: 18px;
+    max-width: 98vw;
+    font-size: 0.98em;
+  }
+  .modal-content {
+    min-width: 0;
+    padding: 14px 4vw;
+    border-radius: 12px;
+    gap: 10px;
+  }
+  input {
+    padding: 10px;
+    border-radius: 7px;
+    font-size: 1em;
+  }
+  footer {
+    font-size: 0.92em;
+    padding: 10px 0;
+  }
 } 
