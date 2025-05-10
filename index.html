@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>티켓팅 훈련소</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>티켓팅 훈련소</h1>
+            <div class="server-time">
+                <span>서버 시간: </span>
+                <span id="current-time"></span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="ticket-practice">
+            <h2>티켓팅 연습</h2>
+            <div class="practice-container">
+                <div class="practice-info">
+                    <h3>연습 정보</h3>
+                    <p>시작 시간: <span id="start-time">--:--:--</span></p>
+                    <p>남은 시간: <span id="countdown">--:--:--</span></p>
+                    <p>남은 티켓: <span id="remaining-tickets">0</span>장</p>
+                </div>
+                <div class="practice-controls">
+                    <button id="start-practice" class="btn">연습 시작</button>
+                    <button id="reset-practice" class="btn">초기화</button>
+                    <button id="end-practice" class="btn" disabled>연습 종료</button>
+                </div>
+            </div>
+            <div class="ticket-game" id="ticket-game">
+                <div class="ticket-area">
+                    <div class="ticket" id="ticket">
+                        <div class="ticket-content">
+                            <h3>콘서트 티켓</h3>
+                            <p>좌석: <span id="seat-number">--</span></p>
+                            <p>가격: <span id="ticket-price">--</span>원</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button id="buy-ticket" class="btn" disabled>티켓 구매</button>
+                    <div class="game-info">
+                        <p>성공: <span id="success-count">0</span>회</p>
+                        <p>실패: <span id="fail-count">0</span>회</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="practice-history">
+            <h2>연습 기록</h2>
+            <div class="history-container">
+                <table id="history-table">
+                    <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>시작 시간</th>
+                            <th>소요 시간</th>
+                            <th>성공 횟수</th>
+                            <th>실패 횟수</th>
+                            <th>성공률</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 티켓팅 훈련소</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
