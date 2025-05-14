@@ -5,20 +5,24 @@ const initialState = {
   seatLayout: [],
   soldSeats: [],
   selectedSeats: [],
-  timeLeft: 60,
+  timeLeft: 120, // 기본값 2분으로 설정
   isActive: false,
   history: [],
-  paymentStatus: null
+  paymentStatus: null,
+  event: null // 이벤트 설정 저장
 };
 
 // 티켓팅 리듀서
 function ticketingReducer(state, action) {
   switch (action.type) {
+    case 'SET_EVENT':
+      return { ...state, event: action.payload };
+      
     case 'SET_SEAT_LAYOUT':
       return { ...state, seatLayout: action.payload };
     
     case 'UPDATE_SOLD_SEATS':
-      return { ...state, soldSeats: [...state.soldSeats, ...action.payload] };
+      return { ...state, soldSeats: action.payload };
     
     case 'SELECT_SEAT':
       // 최대 4석까지만 선택 가능
@@ -29,6 +33,12 @@ function ticketingReducer(state, action) {
         selectedSeats: [...state.selectedSeats, action.payload] 
       };
     
+    case 'SELECT_SEATS':
+      return { 
+        ...state, 
+        selectedSeats: action.payload 
+      };
+      
     case 'DESELECT_SEAT':
       return { 
         ...state, 
@@ -53,6 +63,15 @@ function ticketingReducer(state, action) {
     
     case 'RESET_SELECTION':
       return { ...state, selectedSeats: [] };
+      
+    case 'RESET_STATE':
+      return {
+        ...initialState,
+        history: state.history,
+        seatLayout: state.seatLayout,
+        event: state.event,
+        soldSeats: state.soldSeats
+      };
     
     case 'SAVE_HISTORY':
       const newHistory = [...state.history, action.payload];
@@ -61,6 +80,8 @@ function ticketingReducer(state, action) {
       return { ...state, history: newHistory };
     
     case 'CLEAR_HISTORY':
+      // 히스토리 삭제 시 로컬 스토리지도 직접 업데이트
+      localStorage.removeItem('ticket-history');
       return { ...state, history: [] };
     
     case 'SET_PAYMENT_STATUS':
@@ -92,7 +113,8 @@ function ticketingReducer(state, action) {
       return {
         ...initialState,
         history: state.history,
-        seatLayout: state.seatLayout
+        seatLayout: state.seatLayout,
+        event: state.event
       };
     
     default:

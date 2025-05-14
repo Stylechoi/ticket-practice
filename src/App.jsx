@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // 컨텍스트 프로바이더
-import { AuthProvider } from './contexts/AuthContext';
+import { MessageProvider } from './contexts/MessageContext';
 import { TicketingProvider } from './contexts/TicketingContext';
 
 // 레이아웃 컴포넌트
@@ -12,23 +12,21 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 
 // 페이지 컴포넌트
-import LoginPage from './pages/LoginPage';
+import MessagesPage from './pages/MessagesPage';
 import TicketingPage from './pages/TicketingPage';
-import ProfilePage from './pages/ProfilePage';
 import StatsPage from './pages/StatsPage';
 
 function App() {
   return (
-    <AuthProvider>
+    <MessageProvider>
       <TicketingProvider>
         <div className="app-container">
           <Header />
           
           <main className="main-content">
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/messages" element={<MessagesPage />} />
               <Route path="/ticket" element={<TicketingPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/stats" element={<StatsPage />} />
               <Route path="/" element={<Navigate to="/ticket" replace />} />
             </Routes>
@@ -38,7 +36,7 @@ function App() {
           <ToastContainer position="bottom-right" theme="dark" />
         </div>
       </TicketingProvider>
-    </AuthProvider>
+    </MessageProvider>
   );
 }
 

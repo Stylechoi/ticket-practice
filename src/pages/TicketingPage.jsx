@@ -2,18 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTicketing } from '../contexts/TicketingContext';
-import { useAuth } from '../contexts/AuthContext';
 import DifficultySelector from '../components/ticketing/DifficultySelector';
 import VenueSelector from '../components/ticketing/VenueSelector';
 import EventHeader from '../components/ticketing/EventHeader';
 import WaitingRoom from '../components/ticketing/WaitingRoom';
 import SeatMap from '../components/ticketing/SeatMap';
+import PaymentForm from '../components/payment/PaymentForm';
 import { getEventSettings, getVenueLayout } from '../services/api';
 import '../styles/pages/Ticketing.css';
 
 const TicketingPage = () => {
   const { state, dispatch } = useTicketing();
-  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   
   const [currentStep, setCurrentStep] = useState('setup'); // setup, waiting, seats, payment, complete
@@ -34,17 +33,24 @@ const TicketingPage = () => {
       dispatch({ type: 'SET_VENUE', payload: venueLayout });
       dispatch({ type: 'SET_SEAT_LAYOUT', payload: venueLayout.zones });
       
-      // 상태 초기화
-      dispatch({ type: 'RESET_STATE' });
-      dispatch({ 
-        type: 'RESET_TIMER', 
-        payload: settings.paymentTimeLimit || 60 
+      // 매진된 좌석 설정
+      dispatch({
+        type: 'UPDATE_SOLD_SEATS',
+        payload: settings.soldOutSeats || []
       });
       
-      // 활성화
+      // 상태 초기화
+      dispatch({ type: 'RESET_STATE' });
+      
+      // 좌석 선택 시간 설정 (타이머는 비활성화 상태로)
+      dispatch({ 
+        type: 'RESET_TIMER', 
+        payload: settings.seatSelectionTimeLimit || 120 
+      });
+      
       dispatch({
         type: 'SET_ACTIVE',
-        payload: true
+        payload: false
       });
       
       return true;
@@ -68,6 +74,20 @@ const TicketingPage = () => {
       if (selectedDifficulty === 'easy') {
         // 쉬움 난이도에서는 대기열 없이 바로 시작
         setCurrentStep('seats');
+        
+        // 이동 후 타이머 시작 (좌석 선택 시간으로 설정)
+        setTimeout(() => {
+          dispatch({ 
+            type: 'RESET_TIMER', 
+            payload: state.event?.seatSelectionTimeLimit || 120 
+          });
+          
+          // 타이머 활성화
+          dispatch({
+            type: 'SET_ACTIVE',
+            payload: true
+          });
+        }, 300);
       } else {
         // 대기열 시작
         setCurrentStep('waiting');
@@ -77,8 +97,23 @@ const TicketingPage = () => {
   
   // 대기열에서 입장 처리
   const handleEnterFromWaiting = useCallback(() => {
+    // 좌석 페이지로 이동
     setCurrentStep('seats');
-  }, []);
+    
+    // 이동 후 타이머 시작 (좌석 선택 시간으로 설정)
+    setTimeout(() => {
+      dispatch({ 
+        type: 'RESET_TIMER', 
+        payload: state.event?.seatSelectionTimeLimit || 60 
+      });
+      
+      // 타이머 활성화
+      dispatch({
+        type: 'SET_ACTIVE',
+        payload: true
+      });
+    }, 300); // 페이지 전환 후 약간의 딜레이를 줌
+  }, [dispatch, state.event]);
   
   // 좌석 선택 완료 처리
   const handleSeatSelectionComplete = useCallback((selectedSeats) => {
@@ -87,23 +122,57 @@ const TicketingPage = () => {
       return;
     }
     
-    // 결제 페이지로 이동 (임시로 완료 처리)
+    // 타이머 일시 정지
+    dispatch({
+      type: 'SET_ACTIVE',
+      payload: false
+    });
+    
+    // 결제 페이지로 이동
+    setCurrentStep('payment');
+    
+    // 선택된 좌석 저장
+    dispatch({
+      type: 'SELECT_SEATS',
+      payload: selectedSeats
+    });
+    
+    // 결제 시간으로 타이머 재설정 (잠시 후 시작)
+    setTimeout(() => {
+      dispatch({
+        type: 'RESET_TIMER', 
+        payload: state.event?.paymentTimeLimit || 60
+      });
+      
+      // 타이머 활성화
+      dispatch({
+        type: 'SET_ACTIVE',
+        payload: true
+      });
+    }, 300);
+  }, [dispatch, state.event]);
+  
+  // 결제 완료 처리
+  const handlePaymentComplete = useCallback((paymentResult) => {
     toast.success('결제가 완료되었습니다!');
-    setCurrentStep('complete');
     
     // 결제 정보 저장
     dispatch({
       type: 'SAVE_PAYMENT_RESULT',
-      payload: {
-        seats: selectedSeats,
-        paymentInfo: {
-          status: 'completed',
-          transactionId: 'T' + Date.now(),
-          amount: selectedSeats.reduce((sum, seat) => sum + seat.price, 0)
-        }
-      }
+      payload: paymentResult
     });
+    
+    // 완료 페이지로 이동
+    setCurrentStep('complete');
   }, [dispatch]);
+  
+  // 결제 취소 처리
+  const handlePaymentCancel = useCallback(() => {
+    toast.info('결제가 취소되었습니다.');
+    
+    // 좌석 선택 페이지로 돌아가기
+    setCurrentStep('seats');
+  }, []);
   
   // 다시 시작
   const handleRestart = useCallback(() => {
@@ -114,14 +183,43 @@ const TicketingPage = () => {
   // 타임아웃 처리
   useEffect(() => {
     if (state.timeLeft === 0 && state.isActive) {
-      toast.error('시간이 초과되었습니다!');
-      
       if (currentStep === 'seats') {
         // 좌석 선택 시간 초과 시
+        toast.error('시간이 초과되었습니다! 예매 실패입니다!');
+        
+        // 실패 기록 저장
+        dispatch({
+          type: 'SAVE_HISTORY',
+          payload: {
+            date: new Date().toLocaleDateString(),
+            time: new Date().toLocaleTimeString(),
+            seats: [],
+            result: '실패 (시간 초과)',
+            venue: selectedVenue?.name
+          }
+        });
+        
+        handleRestart();
+      } else if (currentStep === 'payment') {
+        // 결제 시간 초과 시
+        toast.error('결제 시간이 초과되었습니다! 예매 실패입니다!');
+        
+        // 실패 기록 저장
+        dispatch({
+          type: 'SAVE_HISTORY',
+          payload: {
+            date: new Date().toLocaleDateString(),
+            time: new Date().toLocaleTimeString(),
+            seats: state.selectedSeats,
+            result: '실패 (시간 초과)',
+            venue: selectedVenue?.name
+          }
+        });
+        
         handleRestart();
       }
     }
-  }, [state.timeLeft, state.isActive, currentStep, handleRestart]);
+  }, [state.timeLeft, state.isActive, currentStep, state.selectedSeats, handleRestart, dispatch, selectedVenue]);
   
   // 현재 단계에 따른 컴포넌트 렌더링
   const renderCurrentStep = () => {
@@ -157,7 +255,8 @@ const TicketingPage = () => {
               {selectedDifficulty === 'easy' && (
                 <div className="difficulty-info">
                   <h4>쉬움 모드</h4>
-                  <p>대기열 없음, 매진율 낮음, 서버 안정적, 결제 시간 충분</p>
+                  <p>대기열 없음, 매진율 낮음(10%), 서버 안정적</p>
+                  <p>좌석 선택 시간: 2분, 결제 시간: 3분</p>
                   <p>초보자에게 적합한 모드입니다.</p>
                 </div>
               )}
@@ -165,7 +264,8 @@ const TicketingPage = () => {
               {selectedDifficulty === 'normal' && (
                 <div className="difficulty-info">
                   <h4>보통 모드</h4>
-                  <p>짧은 대기열, 중간 매진율, 약간의 서버 지연</p>
+                  <p>짧은 대기열, 중간 매진율(30%), 약간의 서버 지연</p>
+                  <p>좌석 선택 시간: 20초, 결제 시간: 1분</p>
                   <p>실제 티켓팅과 유사한 난이도입니다.</p>
                 </div>
               )}
@@ -173,7 +273,8 @@ const TicketingPage = () => {
               {selectedDifficulty === 'hard' && (
                 <div className="difficulty-info">
                   <h4>어려움 모드</h4>
-                  <p>긴 대기열, 높은 매진율, 서버 지연 및 오류 발생</p>
+                  <p>긴 대기열, 높은 매진율(60%), 서버 지연 및 오류 발생</p>
+                  <p>좌석 선택 시간: 8초, 결제 시간: 45초</p>
                   <p>인기 공연 티켓팅 수준의 난이도입니다.</p>
                 </div>
               )}
@@ -181,7 +282,8 @@ const TicketingPage = () => {
               {selectedDifficulty === 'nightmare' && (
                 <div className="difficulty-info">
                   <h4>악몽 모드</h4>
-                  <p>매우 긴 대기열, 매우 높은 매진율, 심각한 서버 지연 및 오류</p>
+                  <p>매우 긴 대기열, 매우 높은 매진율(90%), 심각한 서버 지연 및 오류</p>
+                  <p>좌석 선택 시간: 4초, 결제 시간: 30초</p>
                   <p>BTS, 테일러 스위프트급 티켓팅 난이도입니다.</p>
                 </div>
               )}
@@ -215,6 +317,31 @@ const TicketingPage = () => {
               venueType={selectedVenue?.type || 'concert'} 
               onSeatSelect={handleSeatSelectionComplete} 
             />
+          </>
+        );
+        
+      case 'payment':
+        // 결제 페이지 추가
+        return (
+          <>
+            <EventHeader 
+              event={{
+                name: selectedVenue?.name + ' 티켓팅 연습',
+                date: new Date().toLocaleDateString(),
+                time: '19:00',
+                venue: selectedVenue?.name
+              }} 
+              timeLeft={state.timeLeft} 
+              mode="payment"
+            />
+            {/* 결제 컴포넌트 추가 */}
+            <div className="payment-page">
+              <PaymentForm 
+                selectedSeats={state.selectedSeats}
+                onPaymentComplete={handlePaymentComplete}
+                onCancel={handlePaymentCancel}
+              />
+            </div>
           </>
         );
         

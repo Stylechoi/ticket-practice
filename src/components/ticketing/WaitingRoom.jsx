@@ -16,24 +16,24 @@ const WaitingRoom = ({ eventId, difficulty = 'normal', onEnter }) => {
       normal: {
         minWaiting: 10,
         maxWaiting: 500,
-        minWaitTime: 5,
-        maxWaitTime: 20,
+        minWaitTime: 0,
+        maxWaitTime: 0,
         minLoad: 70,
         maxLoad: 85
       },
       hard: {
         minWaiting: 500,
         maxWaiting: 3000,
-        minWaitTime: 20,
-        maxWaitTime: 40,
+        minWaitTime: 2,
+        maxWaitTime: 2,
         minLoad: 85,
         maxLoad: 95
       },
       nightmare: {
         minWaiting: 3000,
         maxWaiting: 10000,
-        minWaitTime: 40,
-        maxWaitTime: 60,
+        minWaitTime: 4,
+        maxWaitTime: 6,
         minLoad: 95,
         maxLoad: 99.9
       }
@@ -177,6 +177,7 @@ const WaitingRoom = ({ eventId, difficulty = 'normal', onEnter }) => {
                 <li>여러 기기로 동시 접속 시 계정이 차단될 수 있습니다.</li>
                 <li>미리 결제 정보를 준비해두세요.</li>
                 <li>네트워크 상태가 안정적인지 확인하세요.</li>
+                <li><strong>주의:</strong> 실제 티켓팅 사이트는 이 연습보다 수십 배 더 기다려야 합니다!</li>
               </ul>
             </div>
           </div>

@@ -323,6 +323,22 @@
   margin-top: var(--spacing-xs);
 }
 
+.time-warning {
+  color: #e74c3c;
+  font-weight: bold;
+  margin: 10px 0;
+  padding: 8px;
+  text-align: center;
+  background-color: rgba(231, 76, 60, 0.1);
+  border-radius: 4px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
 .selection-summary h3 {
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-md);

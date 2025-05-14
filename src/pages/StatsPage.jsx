@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTicketing } from '../contexts/TicketingContext';
-import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import '../styles/pages/Stats.css';
 
 const StatsPage = () => {
-  const { state } = useTicketing();
-  const { user } = useAuth();
+  const { state, dispatch } = useTicketing();
   const navigate = useNavigate();
   
   const [stats, setStats] = useState({
@@ -53,7 +51,17 @@ const StatsPage = () => {
   const handleClearHistory = () => {
     if (window.confirm('모든 기록을 삭제하시겠습니까?')) {
       // 기록 삭제 액션 디스패치
-      // (현재 기능 구현 안됨)
+      dispatch({ type: 'CLEAR_HISTORY' });
+      // 로컬 스토리지에서도 직접 삭제 (추가)
+      localStorage.removeItem('ticket-history');
+      // 기록 삭제 후 상태 업데이트
+      setStats({
+        totalAttempts: 0,
+        successCount: 0,
+        successRate: 0,
+        totalAmount: 0,
+        averageAmount: 0
+      });
     }
   };
   

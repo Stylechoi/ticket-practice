@@ -1,0 +1,280 @@
+.messages-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--color-background);
+}
+
+.messages-container {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-medium);
+  padding: 30px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.messages-container h2 {
+  text-align: center;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.message-subtitle {
+  text-align: center;
+  color: var(--color-text-secondary);
+  margin-bottom: 25px;
+  font-size: 16px;
+}
+
+/* 메시지 작성 폼 */
+.message-form {
+  background-color: var(--color-surface-variant);
+  border-radius: var(--border-radius-md);
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 5px;
+}
+
+.error-message {
+  color: var(--color-error);
+  background-color: rgba(var(--color-error-rgb), 0.1);
+  padding: 10px;
+  border-radius: var(--border-radius-sm);
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.submit-button {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.submit-button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* 메시지 목록 */
+.message-divider {
+  position: relative;
+  text-align: center;
+  margin: 30px 0;
+}
+
+.message-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--color-border);
+}
+
+.message-divider span {
+  position: relative;
+  display: inline-block;
+  padding: 0 15px;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+.message-list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.message-card {
+  background-color: var(--color-surface-variant);
+  border-radius: var(--border-radius-md);
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  border-left: 4px solid var(--color-primary);
+}
+
+/* 내 메시지 스타일 */
+.message-card.my-message {
+  background-color: rgba(var(--color-primary-rgb), 0.05);
+  border-left: 4px solid var(--color-secondary);
+}
+
+.my-label {
+  font-size: 11px;
+  color: var(--color-secondary);
+  margin-left: 8px;
+  font-weight: normal;
+  background-color: rgba(var(--color-secondary-rgb), 0.1);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.message-author {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.message-date {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.message-text {
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(var(--color-error-rgb), 0.1);
+  border: none;
+  color: var(--color-error);
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.3s;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.delete-button:hover {
+  opacity: 1;
+  background: rgba(var(--color-error-rgb), 0.2);
+}
+
+.empty-message {
+  text-align: center;
+  padding: 30px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 30px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* 페이지 액션 버튼 */
+.page-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.practice-button {
+  display: inline-block;
+  background-color: var(--color-secondary);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--border-radius-md);
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.practice-button:hover {
+  background-color: var(--color-secondary-dark);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .messages-container {
+    padding: 20px;
+  }
+  
+  .message-form {
+    padding: 15px;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    padding: 10px;
+  }
+  
+  .submit-button,
+  .practice-button {
+    padding: 10px 15px;
+  }
+  
+  .message-list {
+    max-height: 400px;
+  }
+}

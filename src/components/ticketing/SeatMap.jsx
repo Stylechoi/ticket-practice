@@ -160,6 +160,9 @@ const SeatMap = ({ venueType = 'concert', onSeatSelect }) => {
         <div className="empty-selection">
           <p>좌석을 선택해주세요.</p>
           <p className="selection-hint">최대 4석까지 선택 가능합니다.</p>
+          {state.timeLeft <= 10 && (
+            <p className="time-warning">⚠️ 좌석 선택 시간이 얼마 남지 않았습니다!</p>
+          )}
         </div>
       );
     }
@@ -197,6 +200,9 @@ const SeatMap = ({ venueType = 'concert', onSeatSelect }) => {
           <span>총 결제금액</span>
           <span>{formatPrice(totalPrice)}</span>
         </div>
+        {state.timeLeft <= 10 && (
+          <div className="time-warning">⚠️ 좌석 선택 시간이 얼마 남지 않았습니다!</div>
+        )}
         <button 
           className="select-complete-button" 
           onClick={handleSelectionComplete}

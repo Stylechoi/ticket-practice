@@ -12,6 +12,8 @@ const EventHeader = ({ event, timeLeft, mode }) => {
         return <span className="mode-badge simulation">시뮬레이션 모드</span>;
       case 'real':
         return <span className="mode-badge real">실전 모드</span>;
+      case 'payment':
+        return <span className="mode-badge payment">결제 진행 중</span>;
       default:
         return null;
     }
@@ -23,7 +25,7 @@ const EventHeader = ({ event, timeLeft, mode }) => {
       <div className="event-header">
         <div className="event-header-content">
           <h2>티켓팅 연습</h2>
-          <div className="time-display">
+          <div className={`time-display ${timeLeft <= 10 ? 'time-warning' : ''}`}>
             {timeLeft > 0 ? formatTimeRemaining(timeLeft) : '00:00'}
           </div>
         </div>
@@ -46,7 +48,7 @@ const EventHeader = ({ event, timeLeft, mode }) => {
         
         <div className="time-container">
           <div className="time-label">남은 시간</div>
-          <div className="time-display">
+          <div className={`time-display ${timeLeft <= 10 ? 'time-warning' : ''}`}>
             {timeLeft > 0 ? formatTimeRemaining(timeLeft) : '00:00'}
           </div>
         </div>
@@ -54,7 +56,7 @@ const EventHeader = ({ event, timeLeft, mode }) => {
       
       <div className="progress-bar-container">
         <div 
-          className="progress-bar" 
+          className={`progress-bar ${timeLeft <= 10 ? 'time-warning' : ''}`} 
           style={{ width: `${(timeLeft / (event.paymentTimeLimit || 60)) * 100}%` }}
         ></div>
       </div>

@@ -2,6 +2,16 @@
   width: 100%;
 }
 
+/* 결제 페이지 스타일 */
+.payment-page {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 /* 티켓팅 설정 스타일 */
 .setup-container {
   background-color: var(--color-surface);

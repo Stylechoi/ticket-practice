@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
 import { formatCurrentTime } from '../../utils/dateUtils';
 import '../../styles/components/Header.css';
 
 const Header = () => {
-  const { user, logout } = useAuth();
   const location = useLocation();
   const [serverTime, setServerTime] = useState(formatCurrentTime());
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -20,11 +18,6 @@ const Header = () => {
       clearInterval(timer);
     };
   }, []);
-  
-  // 로그아웃 처리
-  const handleLogout = () => {
-    logout();
-  };
   
   // 모바일 메뉴 토글
   const toggleMobileMenu = () => {
@@ -51,20 +44,9 @@ const Header = () => {
               <li className={location.pathname === '/stats' ? 'active' : ''}>
                 <Link to="/stats">기록/통계</Link>
               </li>
-              {user ? (
-                <>
-                  <li className={location.pathname === '/profile' ? 'active' : ''}>
-                    <Link to="/profile">내 정보</Link>
-                  </li>
-                  <li>
-                    <button onClick={handleLogout} className="logout-btn">로그아웃</button>
-                  </li>
-                </>
-              ) : (
-                <li className={location.pathname === '/login' ? 'active' : ''}>
-                  <Link to="/login">로그인</Link>
-                </li>
-              )}
+              <li className={location.pathname === '/messages' ? 'active' : ''}>
+                <Link to="/messages">응원 메시지</Link>
+              </li>
             </ul>
           </nav>
           
