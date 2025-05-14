@@ -44,7 +44,7 @@ const MessagesPage = () => {
   };
   
   // 메시지 삭제
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     // 본인 메시지인지 확인
     if (!isMyMessage(id)) {
       toast.error('본인이 작성한 메시지만 삭제할 수 있습니다.');
@@ -52,7 +52,7 @@ const MessagesPage = () => {
     }
     
     if (window.confirm('정말 이 메시지를 삭제하시겠습니까?')) {
-      const result = deleteMessage(id);
+      const result = await deleteMessage(id);
       
       if (result.success) {
         toast.success('메시지가 삭제되었습니다.');
