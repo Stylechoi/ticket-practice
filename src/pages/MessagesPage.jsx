@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMessages } from '../contexts/MessageContext';
 import { toast } from 'react-toastify';
+import SEO from '../components/SEO';
 import '../styles/pages/Messages.css';
 
 const MessagesPage = () => {
@@ -91,6 +92,10 @@ const MessagesPage = () => {
   
   return (
     <div className="messages-page">
+      <SEO 
+        title="티켓팅 응원 메시지 - 티켓팅 훈련소" 
+        description="티켓팅 도전에 대한 응원 메시지를 남기고 공유하세요. 다른 사용자들의 응원을 받으며 티켓팅 성공률을 높이세요."
+      />
       <div className="messages-container">
         <h2>티켓팅 응원 메시지</h2>
         <div className="message-subtitle">티켓팅 도전에 대한 응원이나 다짐을 남겨보세요!</div>

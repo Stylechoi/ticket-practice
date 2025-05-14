@@ -8,6 +8,7 @@ import EventHeader from '../components/ticketing/EventHeader';
 import WaitingRoom from '../components/ticketing/WaitingRoom';
 import SeatMap from '../components/ticketing/SeatMap';
 import PaymentForm from '../components/payment/PaymentForm';
+import SEO from '../components/SEO';
 import { getEventSettings, getVenueLayout } from '../services/api';
 import '../styles/pages/Ticketing.css';
 
@@ -18,6 +19,28 @@ const TicketingPage = () => {
   const [currentStep, setCurrentStep] = useState('setup'); // setup, waiting, seats, payment, complete
   const [selectedDifficulty, setSelectedDifficulty] = useState('normal');
   const [selectedVenue, setSelectedVenue] = useState(null);
+  
+  // SEO 타이틀 및 설명 설정
+  const seoTitle = currentStep === 'setup' 
+    ? '티켓팅 훈련소 - 실전처럼 티켓팅 연습하기'
+    : currentStep === 'waiting' 
+      ? '티켓팅 대기실 - 실제 티켓팅처럼 대기하기'
+      : currentStep === 'seats'
+        ? '좌석 선택 - 티켓팅 실전 연습'
+        : currentStep === 'payment'
+          ? '결제 진행 - 티켓팅 미리보기'
+          : '티켓팅 완료 - 성공적인 티켓팅 연습';
+  
+  const seoDescription = currentStep === 'setup'
+    ? '티켓팅 연습 서비스에서 공연장과 난이도를 선택하고 실전처럼 티켓팅을 연습해보세요. 콘서트, 팬미팅 티켓팅 성공률을 높이는 최고의 방법입니다.'
+    : currentStep === 'waiting'
+      ? '실제 티켓팅 대기열을 시뮬레이션합니다. 티켓팅 대기 과정을 미리 경험하고 긴장감을 준비하세요.'
+      : currentStep === 'seats'
+        ? '제한 시간 내에 좌석을 선택하는 연습을 할 수 있습니다. 빠른 좌석 선택 능력을 향상시키세요.'
+        : currentStep === 'payment'
+          ? '티켓팅의 마지막 단계인 결제 과정을 연습해보세요. 실전에서 당황하지 않도록 미리 준비하세요.'
+          : '티켓팅 연습을 성공적으로 완료했습니다. 실전에서도 이런 결과를 얻을 수 있도록 계속 연습하세요.';
+  
   
   // 티켓팅 설정 불러오기
   const loadEventSettings = useCallback(async () => {
@@ -385,6 +408,7 @@ const TicketingPage = () => {
   
   return (
     <div className="ticketing-page">
+      <SEO title={seoTitle} description={seoDescription} />
       {renderCurrentStep()}
     </div>
   );
