@@ -9,6 +9,7 @@ import { TicketingProvider } from './contexts/TicketingContext';
 
 // 레이아웃 컴포넌트
 import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
 
 // 페이지 컴포넌트
 import MessagesPage from './pages/MessagesPage';
@@ -31,6 +32,7 @@ function App() {
             </Routes>
           </main>
           
+          <Footer />
           <ToastContainer position="bottom-right" theme="dark" />
         </div>
       </TicketingProvider>

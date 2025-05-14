@@ -22,12 +22,12 @@
 .logo {
   font-size: var(--font-size-xxl);
   font-weight: var(--font-weight-bold);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
 }
 
 .logo a {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
   color: var(--color-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
@@ -37,15 +37,13 @@
   color: var(--color-primary-light);
 }
 
-.github-link {
-  display: flex;
-  align-items: center;
-  color: var(--color-text-secondary);
-  transition: color var(--transition-fast);
+.logo-icon {
+  color: var(--color-primary);
+  transition: transform var(--transition-fast);
 }
 
-.github-link:hover {
-  color: var(--color-primary);
+.logo a:hover .logo-icon {
+  transform: scale(1.1);
 }
 
 .server-time {
