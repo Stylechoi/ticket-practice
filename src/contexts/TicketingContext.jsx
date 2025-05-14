@@ -9,7 +9,8 @@ const initialState = {
   isActive: false,
   history: [],
   paymentStatus: null,
-  event: null // 이벤트 설정 저장
+  event: null, // 이벤트 설정 저장
+  timedOut: false // 타임아웃 발생 여부
 };
 
 // 티켓팅 리듀서
@@ -70,7 +71,14 @@ function ticketingReducer(state, action) {
         history: state.history,
         seatLayout: state.seatLayout,
         event: state.event,
-        soldSeats: state.soldSeats
+        soldSeats: state.soldSeats,
+        timedOut: false
+      };
+      
+    case 'SET_TIMEOUT':
+      return {
+        ...state,
+        timedOut: action.payload
       };
     
     case 'SAVE_HISTORY':

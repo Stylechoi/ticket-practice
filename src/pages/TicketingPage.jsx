@@ -206,41 +206,28 @@ const TicketingPage = () => {
   // 타임아웃 처리
   useEffect(() => {
     if (state.timeLeft === 0 && state.isActive) {
+      // 타임아웃 설정
+      dispatch({ type: 'SET_TIMEOUT', payload: true });
+      
       if (currentStep === 'seats') {
         // 좌석 선택 시간 초과 시
         toast.error('시간이 초과되었습니다! 예매 실패입니다!', {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
-          closeOnClick: true,
+          closeOnClick: false,
           pauseOnHover: true,
-          draggable: true,
+          draggable: false,
           progress: undefined,
           style: {
             background: "#ff3333",
             color: "white",
             fontSize: "16px",
             fontWeight: "bold",
-            textAlign: "center"
+            textAlign: "center",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
           },
         });
-        
-        // 알림 표시
-        if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('예매 실패!', {
-            body: '좌석 선택 시간이 초과되었습니다.',
-            icon: '/favicon.svg'
-          });
-        } else if ('Notification' in window && Notification.permission !== 'denied') {
-          Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-              new Notification('예매 실패!', {
-                body: '좌석 선택 시간이 초과되었습니다.',
-                icon: '/favicon.svg'
-              });
-            }
-          });
-        }
         
         // 실패 기록 저장
         dispatch({
@@ -256,9 +243,6 @@ const TicketingPage = () => {
         
         // 실패 화면 표시
         setCurrentStep('failed');
-        setTimeout(() => {
-          handleRestart();
-        }, 5000); // 5초 후 자동으로 초기 화면으로 이동
         
       } else if (currentStep === 'payment') {
         // 결제 시간 초과 시
@@ -266,26 +250,18 @@ const TicketingPage = () => {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
-          closeOnClick: true,
+          closeOnClick: false,
           pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+          draggable: false,
           style: {
             background: "#ff3333",
             color: "white",
             fontSize: "16px",
             fontWeight: "bold",
-            textAlign: "center"
+            textAlign: "center",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
           },
         });
-        
-        // 알림 표시
-        if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('예매 실패!', {
-            body: '결제 시간이 초과되었습니다.',
-            icon: '/favicon.svg'
-          });
-        }
         
         // 실패 기록 저장
         dispatch({
@@ -301,12 +277,9 @@ const TicketingPage = () => {
         
         // 실패 화면 표시
         setCurrentStep('failed');
-        setTimeout(() => {
-          handleRestart();
-        }, 5000); // 5초 후 자동으로 초기 화면으로 이동
       }
     }
-  }, [state.timeLeft, state.isActive, currentStep, state.selectedSeats, handleRestart, dispatch, selectedVenue]);
+  }, [state.timeLeft, state.isActive, currentStep, state.selectedSeats, dispatch, selectedVenue]);
   
   // 현재 단계에 따른 컴포넌트 렌더링
   const renderCurrentStep = () => {
@@ -446,7 +419,10 @@ const TicketingPage = () => {
             <p className="failed-tip">Tip: 시간 제한이 있는 티켓팅에서는 빠른 결정이 중요합니다.</p>
             
             <div className="action-buttons">
-              <button className="restart-button" onClick={handleRestart}>
+              <button className="restart-button" onClick={() => {
+                dispatch({ type: 'SET_TIMEOUT', payload: false });
+                handleRestart();
+              }}>
                 다시 연습하기
               </button>
             </div>
