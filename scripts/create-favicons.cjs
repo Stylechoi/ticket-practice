@@ -10,17 +10,17 @@ function base64ToBinary(base64) {
 }
 
 // Create favicon.ico from the base64 data
-import { promises as fs } from 'fs';
+const fs = require('fs');
 
 // Convert base64 to binary and write to files
 const faviconBinary = base64ToBinary(BASE64_FAVICON);
 
 try {
   // Write to various favicon files
-  await fs.writeFile('./public/favicon.ico', faviconBinary);
-  await fs.writeFile('./public/favicon-16x16.png', faviconBinary);
-  await fs.writeFile('./public/favicon-32x32.png', faviconBinary);
-  await fs.writeFile('./public/apple-touch-icon.png', faviconBinary);
+  fs.writeFileSync('./public/favicon.ico', faviconBinary);
+  fs.writeFileSync('./public/favicon-16x16.png', faviconBinary);
+  fs.writeFileSync('./public/favicon-32x32.png', faviconBinary);
+  fs.writeFileSync('./public/apple-touch-icon.png', faviconBinary);
   console.log('Favicon files created successfully!');
 } catch (err) {
   console.error('Error creating favicon files:', err);
