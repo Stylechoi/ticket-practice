@@ -92,13 +92,20 @@ export const MessageProvider = ({ children }) => {
         return { success: false, error: '메시지를 찾을 수 없습니다.' };
       }
       
-      if (messageToDelete.userId !== userId) {
+      // 로컬 저장소의 사용자 ID를 직접 확인하여 더 안정적으로 검증
+      const currentUserId = getUserId();
+      
+      if (messageToDelete.userId !== currentUserId) {
         return { success: false, error: '본인이 작성한 메시지만 삭제할 수 있습니다.' };
       }
       
+      // Firebase에서 문서 삭제
       await deleteDoc(doc(db, 'messages', id));
+      
+      // 상태 업데이트
       setMessages(prevMessages => prevMessages.filter(msg => msg.id !== id));
       
+      console.log('메시지가 성공적으로 삭제되었습니다:', id);
       return { success: true };
     } catch (err) {
       console.error('메시지 삭제 오류:', err);
@@ -123,8 +130,15 @@ export const MessageProvider = ({ children }) => {
   
   // 사용자 ID 확인 - 자신의 메시지인지 확인하는 함수
   const isMyMessage = (messageId) => {
-    const message = messages.find(msg => msg.id === messageId);
-    return message ? message.userId === userId : false;
+    try {
+      const message = messages.find(msg => msg.id === messageId);
+      // 항상 최신 사용자 ID 사용
+      const currentUserId = getUserId();
+      return message ? message.userId === currentUserId : false;
+    } catch (error) {
+      console.error('메시지 확인 오류:', error);
+      return false;
+    }
   };
   
   const value = {

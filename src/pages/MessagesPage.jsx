@@ -45,20 +45,29 @@ const MessagesPage = () => {
   
   // 메시지 삭제
   const handleDelete = async (id) => {
-    // 본인 메시지인지 확인
-    if (!isMyMessage(id)) {
-      toast.error('본인이 작성한 메시지만 삭제할 수 있습니다.');
-      return;
-    }
-    
-    if (window.confirm('정말 이 메시지를 삭제하시겠습니까?')) {
-      const result = await deleteMessage(id);
-      
-      if (result.success) {
-        toast.success('메시지가 삭제되었습니다.');
-      } else {
-        toast.error(result.error || '메시지 삭제에 실패했습니다.');
+    try {
+      // 본인 메시지인지 확인
+      if (!isMyMessage(id)) {
+        toast.error('본인이 작성한 메시지만 삭제할 수 있습니다.');
+        return;
       }
+      
+      if (window.confirm('정말 이 메시지를 삭제하시겠습니까?')) {
+        setIsLoading(true);
+        const result = await deleteMessage(id);
+        
+        if (result.success) {
+          toast.success('메시지가 삭제되었습니다.');
+        } else {
+          console.error('삭제 실패:', result.error);
+          toast.error(result.error || '메시지 삭제에 실패했습니다.');
+        }
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('삭제 중 예외 발생:', error);
+      toast.error('메시지 삭제 중 오류가 발생했습니다.');
+      setIsLoading(false);
     }
   };
   
@@ -153,8 +162,9 @@ const MessagesPage = () => {
                     className="delete-button" 
                     onClick={() => handleDelete(message.id)}
                     title="메시지 삭제"
+                    disabled={isLoading}
                   >
-                    ×
+                    {isLoading ? '...' : '×'}
                   </button>
                 )}
               </div>
