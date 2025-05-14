@@ -1,108 +1,92 @@
 .footer {
   background-color: var(--color-background);
   border-top: 1px solid var(--color-border);
-  padding: var(--spacing-xl) 0;
+  padding: 1.5rem 0;
   margin-top: auto;
 }
 
 .footer-container {
-  max-width: var(--max-content-width);
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--spacing-xl);
+  padding: 0 1.5rem;
 }
 
 .footer-content {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
 
 .footer-section {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+}
+
+.main-info {
+  flex: 1;
+  max-width: 70%;
 }
 
 .footer-logo {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
+  font-size: 1.1rem;
+  font-weight: 600;
   color: var(--color-primary);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 0.5rem;
 }
 
-.footer-description, .footer-about {
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  font-size: var(--font-size-sm);
+.footer-description {
+  color: #777;
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
-.footer-section h4 {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  margin-bottom: var(--spacing-sm);
-}
-
-.footer-links {
-  list-style: none;
+.footer-dev {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  align-items: flex-start;
 }
 
-.footer-links li a {
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
+.dev-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4CAF50; /* 초록색으로 변경 */
+  margin-bottom: 0.4rem;
 }
 
-.footer-links li a:hover {
-  color: var(--color-primary);
-}
-
-.footer-social {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.social-link {
+.github-link {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  color: var(--color-text-secondary);
+  gap: 0.5rem;
+  color: #555;
   text-decoration: none;
-  transition: color var(--transition-fast);
-  font-weight: var(--font-weight-medium);
+  transition: color 0.2s;
+  font-size: 0.9rem;
 }
 
-.social-link.github:hover {
-  color: #6e5494;
-}
-
-.developer-note {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-tertiary);
-  margin-top: var(--spacing-xs);
+.github-link:hover {
+  color: var(--color-primary);
 }
 
 .footer-bottom {
-  border-top: 1px solid var(--color-border);
-  padding-top: var(--spacing-md);
   text-align: center;
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-xs);
+  padding-top: 1rem;
+  color: #888;
+  font-size: 0.8rem;
 }
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
   .footer-content {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .main-info {
+    max-width: 100%;
   }
   
   .footer-container {
-    padding: 0 var(--spacing-md);
+    padding: 0 1rem;
   }
 }

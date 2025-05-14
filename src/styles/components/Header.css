@@ -4,33 +4,40 @@
   position: sticky;
   top: 0;
   z-index: var(--z-layer-3);
-  height: var(--header-height);
+  height: 60px;
   display: flex;
   align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 var(--spacing-xl);
-  max-width: var(--max-content-width);
+  padding: 0 1.5rem;
+  max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.main-nav {
+  margin-left: auto;
 }
 
 .logo {
-  font-size: var(--font-size-xxl);
-  font-weight: var(--font-weight-bold);
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .logo a {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 0.5rem;
   color: var(--color-primary);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color 0.2s;
 }
 
 .logo a:hover {
@@ -39,72 +46,65 @@
 
 .logo-icon {
   color: var(--color-primary);
-  transition: transform var(--transition-fast);
+  transition: transform 0.2s;
 }
 
 .logo a:hover .logo-icon {
   transform: scale(1.1);
 }
 
+.nav-section {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
 .server-time {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-size: var(--font-size-lg);
+  font-size: 0.95rem;
   color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
-  text-align: center;
-  min-width: 300px;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
+  font-weight: 500;
+  background-color: rgba(var(--color-primary-rgb), 0.05);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
 }
 
 .main-nav ul {
   display: flex;
   list-style: none;
-  gap: var(--spacing-md);
+  gap: 1rem;
 }
 
 .main-nav a {
-  color: var(--color-text-primary);
+  color: #fff;
   text-decoration: none;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-sm);
-  transition: background-color var(--transition-fast);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  background-color: #505050;
 }
 
 .main-nav li.active a {
-  color: var(--color-primary);
-  font-weight: var(--font-weight-bold);
+  background-color: var(--color-primary);
+  color: white;
 }
 
 .main-nav a:hover {
-  background-color: var(--color-surface-variant);
-}
-
-.logout-btn {
-  background: none;
-  border: none;
-  color: var(--color-text-primary);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-sm);
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-}
-
-.logout-btn:hover {
-  background-color: var(--color-surface-variant);
+  background-color: var(--color-primary-light);
+  color: white;
 }
 
 .mobile-menu-toggle {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 30px;
-  height: 21px;
+  width: 24px;
+  height: 18px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -115,27 +115,30 @@
 .mobile-menu-toggle span {
   display: block;
   width: 100%;
-  height: 3px;
+  height: 2px;
   background-color: var(--color-text-primary);
-  border-radius: 10px;
-  transition: all var(--transition-fast);
+  border-radius: 2px;
+  transition: all 0.2s;
 }
 
 /* 모바일 반응형 */
 @media (max-width: 768px) {
   .header-container {
-    padding: 0 var(--spacing-md);
+    padding: 0 1rem;
   }
   
   .logo {
-    font-size: var(--font-size-xl);
+    font-size: 1rem;
   }
   
   .server-time {
     position: static;
     transform: none;
-    font-size: var(--font-size-md);
+    font-size: 0.8rem;
     min-width: auto;
+    padding: 0.25rem 0.5rem;
+    margin-right: auto;
+    margin-left: 1rem;
   }
   
   .mobile-menu-toggle {
@@ -150,8 +153,8 @@
     height: 100vh;
     background-color: var(--color-surface);
     box-shadow: var(--shadow-large);
-    padding: var(--spacing-xl) var(--spacing-lg);
-    transition: right var(--transition-normal);
+    padding: 4rem 1.5rem;
+    transition: right 0.3s;
     z-index: var(--z-layer-2);
     overflow-y: auto;
   }
@@ -162,24 +165,24 @@
   
   .main-nav ul {
     flex-direction: column;
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-xxl);
+    gap: 1rem;
+    margin-top: 2rem;
   }
   
   .main-nav li {
     width: 100%;
   }
   
-  .main-nav a, .logout-btn {
+  .main-nav a {
     display: block;
-    padding: var(--spacing-sm);
+    padding: 0.75rem;
     width: 100%;
     text-align: left;
   }
   
   /* 햄버거 메뉴 애니메이션 */
   .mobile-active + .mobile-menu-toggle span:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
+    transform: translateY(8px) rotate(45deg);
   }
   
   .mobile-active + .mobile-menu-toggle span:nth-child(2) {
@@ -187,6 +190,6 @@
   }
   
   .mobile-active + .mobile-menu-toggle span:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
+    transform: translateY(-8px) rotate(-45deg);
   }
 }

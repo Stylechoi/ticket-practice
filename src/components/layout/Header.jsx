@@ -30,38 +30,38 @@ const Header = () => {
         <div className="logo">
           <Link to="/">
             <svg className="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 9H21M15 15L13 17M9 15L11 17M4 3H20C21.1046 3 22 3.89543 22 5V19C22 20.1046 21.1046 21 20 21H4C2.89543 21 2 20.1046 2 19V5C2 3.89543 2.89543 3 4 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M16 3V7M8 3V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M20.5 3H3.5C2.67 3 2 3.67 2 4.5V19.5C2 20.33 2.67 21 3.5 21H20.5C21.33 21 22 20.33 22 19.5V4.5C22 3.67 21.33 3 20.5 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 8H22" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M9 14H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M12 11V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
-            <span>2025 티켓팅 훈련소</span>
+            <span>티켓팅 훈련소</span>
           </Link>
         </div>
-        
+
         <div className="server-time">
           {serverTime}
         </div>
+
+        <nav className={`main-nav ${showMobileMenu ? 'mobile-active' : ''}`}>
+          <ul>
+            <li className={location.pathname === '/ticket' ? 'active' : ''}>
+              <Link to="/ticket">티켓팅 연습</Link>
+            </li>
+            <li className={location.pathname === '/stats' ? 'active' : ''}>
+              <Link to="/stats">기록/통계</Link>
+            </li>
+            <li className={location.pathname === '/messages' ? 'active' : ''}>
+              <Link to="/messages">응원 메시지</Link>
+            </li>
+          </ul>
+        </nav>
         
-        <div className="header-right">
-          <nav className={`main-nav ${showMobileMenu ? 'mobile-active' : ''}`}>
-            <ul>
-              <li className={location.pathname === '/ticket' ? 'active' : ''}>
-                <Link to="/ticket">티켓팅 연습</Link>
-              </li>
-              <li className={location.pathname === '/stats' ? 'active' : ''}>
-                <Link to="/stats">기록/통계</Link>
-              </li>
-              <li className={location.pathname === '/messages' ? 'active' : ''}>
-                <Link to="/messages">응원 메시지</Link>
-              </li>
-            </ul>
-          </nav>
-          
-          <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
+        <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </header>
   );
