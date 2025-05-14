@@ -27,14 +27,14 @@
 }
 
 .logo {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
 .logo a {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
   color: var(--color-primary);
   text-decoration: none;
   transition: color 0.2s;
@@ -47,6 +47,8 @@
 .logo-icon {
   color: var(--color-primary);
   transition: transform 0.2s;
+  width: 32px;
+  height: 32px;
 }
 
 .logo a:hover .logo-icon {
@@ -123,26 +125,37 @@
 
 /* 모바일 반응형 */
 @media (max-width: 768px) {
+  .header {
+    height: 56px;
+  }
+
   .header-container {
     padding: 0 1rem;
   }
   
   .logo {
-    font-size: 1rem;
+    font-size: 1.2rem;
+  }
+  
+  .logo-icon {
+    width: 28px;
+    height: 28px;
   }
   
   .server-time {
-    position: static;
-    transform: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 0.8rem;
     min-width: auto;
+    white-space: nowrap;
     padding: 0.25rem 0.5rem;
-    margin-right: auto;
-    margin-left: 1rem;
+    z-index: 1;
   }
   
   .mobile-menu-toggle {
     display: flex;
+    margin-left: auto;
   }
   
   .main-nav {

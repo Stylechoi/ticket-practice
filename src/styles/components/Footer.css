@@ -77,16 +77,35 @@
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
+  .footer {
+    padding: 1.25rem 0;
+  }
+  
   .footer-content {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
+    align-items: center;
+    text-align: center;
   }
   
   .main-info {
     max-width: 100%;
+    text-align: center;
+  }
+  
+  .footer-logo {
+    margin-bottom: 0.5rem;
   }
   
   .footer-container {
     padding: 0 1rem;
+  }
+  
+  .footer-dev {
+    align-items: center;
+  }
+  
+  .github-link {
+    margin: 0 auto;
   }
 }
