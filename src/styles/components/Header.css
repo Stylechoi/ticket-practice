@@ -22,6 +22,9 @@
 .logo {
   font-size: var(--font-size-xxl);
   font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .logo a {
@@ -32,6 +35,17 @@
 
 .logo a:hover {
   color: var(--color-primary-light);
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.github-link:hover {
+  color: var(--color-primary);
 }
 
 .server-time {
