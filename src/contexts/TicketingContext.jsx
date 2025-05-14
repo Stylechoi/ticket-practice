@@ -82,7 +82,12 @@ function ticketingReducer(state, action) {
     case 'CLEAR_HISTORY':
       // 히스토리 삭제 시 로컬 스토리지도 직접 업데이트
       localStorage.removeItem('ticket-history');
-      return { ...state, history: [] };
+      localStorage.removeItem('ticket-sold-seats');
+      return { 
+        ...state, 
+        history: [],
+        soldSeats: [] // 매진된 좌석 정보도 함께 초기화
+      };
     
     case 'SET_PAYMENT_STATUS':
       return { ...state, paymentStatus: action.payload };

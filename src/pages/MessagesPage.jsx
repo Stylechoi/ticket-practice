@@ -143,7 +143,9 @@ const MessagesPage = () => {
                     {message.author}
                     {isMyMessage(message.id) && <span className="my-label">(내 메시지)</span>}
                   </div>
-                  <div className="message-date">{message.date}</div>
+                  <div className="message-date">
+                    {new Date(message.timestamp).toLocaleString()}
+                  </div>
                 </div>
                 <div className="message-text">{message.text}</div>
                 {isMyMessage(message.id) && (

@@ -1,4 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { db } from '../services/firebase';
+import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, limit } from 'firebase/firestore';
 
 // 메시지 컨텍스트 생성
 export const MessageContext = createContext();
@@ -25,38 +27,52 @@ export const MessageProvider = ({ children }) => {
   
   // 사용자 ID와 메시지 불러오기
   useEffect(() => {
-    try {
-      // 사용자 ID 설정
-      const currentUserId = getUserId();
-      setUserId(currentUserId);
-      
-      // 메시지 불러오기
-      const storedMessages = localStorage.getItem('ticket-messages');
-      if (storedMessages) {
-        setMessages(JSON.parse(storedMessages));
+    const fetchMessages = async () => {
+      try {
+        // 사용자 ID 설정
+        const currentUserId = getUserId();
+        setUserId(currentUserId);
+        
+        // Firestore에서 메시지 불러오기
+        const messagesRef = collection(db, 'messages');
+        const q = query(messagesRef, orderBy('timestamp', 'desc'), limit(50));
+        const querySnapshot = await getDocs(q);
+        
+        const fetchedMessages = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        
+        setMessages(fetchedMessages);
+      } catch (err) {
+        console.error('메시지 로드 오류:', err);
+        setError('메시지를 불러오는 중 오류가 발생했습니다.');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error('메시지 로드 오류:', err);
-      setError('메시지를 불러오는 중 오류가 발생했습니다.');
-    } finally {
-      setLoading(false);
-    }
+    };
+    
+    fetchMessages();
   }, []);
   
   // 메시지 추가
-  const addMessage = (author, text) => {
+  const addMessage = async (author, text) => {
     try {
+      const messagesRef = collection(db, 'messages');
       const newMessage = {
-        id: Date.now(),
         author: author.trim(),
         text: text.trim(),
-        date: new Date().toLocaleString(),
-        userId: userId // 작성자 ID 저장
+        timestamp: new Date().toISOString(),
+        userId: userId
       };
       
-      const updatedMessages = [newMessage, ...messages].slice(0, 50); // 최대 50개까지만 저장
-      setMessages(updatedMessages);
-      localStorage.setItem('ticket-messages', JSON.stringify(updatedMessages));
+      const docRef = await addDoc(messagesRef, newMessage);
+      const addedMessage = {
+        id: docRef.id,
+        ...newMessage
+      };
+      
+      setMessages(prevMessages => [addedMessage, ...prevMessages].slice(0, 50));
       
       return { success: true };
     } catch (err) {
@@ -66,12 +82,11 @@ export const MessageProvider = ({ children }) => {
     }
   };
   
-  // 메시지 삭제 (본인 메시지만 삭제 가능)
-  const deleteMessage = (id) => {
+  // 메시지 삭제
+  const deleteMessage = async (id) => {
     try {
       const messageToDelete = messages.find(msg => msg.id === id);
       
-      // 메시지가 없거나 본인 메시지가 아닌 경우
       if (!messageToDelete) {
         return { success: false, error: '메시지를 찾을 수 없습니다.' };
       }
@@ -80,9 +95,8 @@ export const MessageProvider = ({ children }) => {
         return { success: false, error: '본인이 작성한 메시지만 삭제할 수 있습니다.' };
       }
       
-      const updatedMessages = messages.filter(msg => msg.id !== id);
-      setMessages(updatedMessages);
-      localStorage.setItem('ticket-messages', JSON.stringify(updatedMessages));
+      await deleteDoc(doc(db, 'messages', id));
+      setMessages(prevMessages => prevMessages.filter(msg => msg.id !== id));
       
       return { success: true };
     } catch (err) {
