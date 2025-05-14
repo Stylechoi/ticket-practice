@@ -208,7 +208,39 @@ const TicketingPage = () => {
     if (state.timeLeft === 0 && state.isActive) {
       if (currentStep === 'seats') {
         // 좌석 선택 시간 초과 시
-        toast.error('시간이 초과되었습니다! 예매 실패입니다!');
+        toast.error('시간이 초과되었습니다! 예매 실패입니다!', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: {
+            background: "#ff3333",
+            color: "white",
+            fontSize: "16px",
+            fontWeight: "bold",
+            textAlign: "center"
+          },
+        });
+        
+        // 알림 표시
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('예매 실패!', {
+            body: '좌석 선택 시간이 초과되었습니다.',
+            icon: '/favicon.svg'
+          });
+        } else if ('Notification' in window && Notification.permission !== 'denied') {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              new Notification('예매 실패!', {
+                body: '좌석 선택 시간이 초과되었습니다.',
+                icon: '/favicon.svg'
+              });
+            }
+          });
+        }
         
         // 실패 기록 저장
         dispatch({
@@ -222,10 +254,38 @@ const TicketingPage = () => {
           }
         });
         
-        handleRestart();
+        // 실패 화면 표시
+        setCurrentStep('failed');
+        setTimeout(() => {
+          handleRestart();
+        }, 5000); // 5초 후 자동으로 초기 화면으로 이동
+        
       } else if (currentStep === 'payment') {
         // 결제 시간 초과 시
-        toast.error('결제 시간이 초과되었습니다! 예매 실패입니다!');
+        toast.error('결제 시간이 초과되었습니다! 예매 실패입니다!', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: {
+            background: "#ff3333",
+            color: "white",
+            fontSize: "16px",
+            fontWeight: "bold",
+            textAlign: "center"
+          },
+        });
+        
+        // 알림 표시
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('예매 실패!', {
+            body: '결제 시간이 초과되었습니다.',
+            icon: '/favicon.svg'
+          });
+        }
         
         // 실패 기록 저장
         dispatch({
@@ -239,7 +299,11 @@ const TicketingPage = () => {
           }
         });
         
-        handleRestart();
+        // 실패 화면 표시
+        setCurrentStep('failed');
+        setTimeout(() => {
+          handleRestart();
+        }, 5000); // 5초 후 자동으로 초기 화면으로 이동
       }
     }
   }, [state.timeLeft, state.isActive, currentStep, state.selectedSeats, handleRestart, dispatch, selectedVenue]);
@@ -366,6 +430,27 @@ const TicketingPage = () => {
               />
             </div>
           </>
+        );
+        
+      case 'failed':
+        return (
+          <div className="failed-container">
+            <div className="failed-animation">
+              <div className="cross-circle">
+                <div className="cross"></div>
+              </div>
+            </div>
+            
+            <h2>예매 실패!</h2>
+            <p className="failed-message">시간 초과로 인해 예매에 실패했습니다.</p>
+            <p className="failed-tip">Tip: 시간 제한이 있는 티켓팅에서는 빠른 결정이 중요합니다.</p>
+            
+            <div className="action-buttons">
+              <button className="restart-button" onClick={handleRestart}>
+                다시 연습하기
+              </button>
+            </div>
+          </div>
         );
         
       case 'complete':
