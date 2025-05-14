@@ -12,7 +12,7 @@ const MessagesPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   
   // 메시지 추가
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!newMessage.trim()) {
@@ -29,7 +29,7 @@ const MessagesPage = () => {
     setIsLoading(true);
     
     // 메시지 추가
-    const result = addMessage(author, newMessage);
+    const result = await addMessage(author, newMessage);
     
     if (result.success) {
       // 입력 필드 초기화
