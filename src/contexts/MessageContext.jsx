@@ -59,11 +59,12 @@ export const MessageProvider = ({ children }) => {
   const addMessage = async (author, text) => {
     try {
       const messagesRef = collection(db, 'messages');
+      const currentUserId = getUserId(); // 항상 최신값 사용
       const newMessage = {
         author: author.trim(),
         text: text.trim(),
         timestamp: new Date().toISOString(),
-        userId: userId
+        userId: currentUserId
       };
       
       const docRef = await addDoc(messagesRef, newMessage);
