@@ -147,6 +147,7 @@
   font-size: 1.1rem;
   margin-bottom: 1rem;
   color: var(--color-text-primary);
+  white-space: nowrap;
 }
 
 .failed-tip {
@@ -156,6 +157,9 @@
   padding: 0.75rem;
   border-radius: var(--border-radius-sm);
   margin-bottom: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @keyframes scaleIn {

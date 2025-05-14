@@ -32,15 +32,69 @@ const TicketingPage = () => {
           : '티켓팅 완료 - 성공적인 티켓팅 연습';
   
   const seoDescription = currentStep === 'setup'
-    ? '티켓팅 연습 서비스에서 공연장과 난이도를 선택하고 실전처럼 티켓팅을 연습해보세요. 콘서트, 팬미팅 티켓팅 성공률을 높이는 최고의 방법입니다.'
+    ? '티켓팅 연습 서비스에서 공연장과 난이도를 선택하고 실전처럼 티켓팅을 연습해보세요.'
     : currentStep === 'waiting'
-      ? '실제 티켓팅 대기열을 시뮬레이션합니다. 티켓팅 대기 과정을 미리 경험하고 긴장감을 준비하세요.'
+      ? '실제 티켓팅 대기열을 시뮬레이션합니다.'
       : currentStep === 'seats'
-        ? '제한 시간 내에 좌석을 선택하는 연습을 할 수 있습니다. 빠른 좌석 선택 능력을 향상시키세요.'
+        ? '제한 시간 내에 좌석을 선택하는 연습을 할 수 있습니다.'
         : currentStep === 'payment'
-          ? '티켓팅의 마지막 단계인 결제 과정을 연습해보세요. 실전에서 당황하지 않도록 미리 준비하세요.'
-          : '티켓팅 연습을 성공적으로 완료했습니다. 실전에서도 이런 결과를 얻을 수 있도록 계속 연습하세요.';
+          ? '티켓팅의 마지막 단계인 결제 과정을 연습해보세요.'
+          : '티켓팅 연습을 성공적으로 완료했습니다.';
   
+  // 타임아웃 처리를 위한 단일 효과
+  useEffect(() => {
+    // 타이머가 0이 되었을 때만 실행
+    if (state.timeLeft === 0 && (currentStep === 'seats' || currentStep === 'payment')) {
+      // 중복 알림 방지를 위해 모든 토스트 제거
+      toast.dismiss();
+      
+      // 타이머 비활성화
+      dispatch({ type: 'SET_ACTIVE', payload: false });
+      
+      // 로그 기록
+      console.log(`타임아웃 발생: ${currentStep} 단계에서 시간 초과`);
+      
+      // 단일 알림 표시
+      toast.error(
+        currentStep === 'seats' 
+          ? '좌석 선택 시간이 초과되었습니다!'
+          : '결제 시간이 초과되었습니다!', 
+        {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          style: {
+            background: "#ff3333",
+            color: "white",
+            fontSize: "18px",
+            fontWeight: "bold",
+            textAlign: "center",
+            padding: "10px 16px",
+            whiteSpace: "nowrap",
+            borderRadius: "4px"
+          },
+        }
+      );
+      
+      // 실패 기록 저장
+      dispatch({
+        type: 'SAVE_HISTORY',
+        payload: {
+          date: new Date().toLocaleDateString(),
+          time: new Date().toLocaleTimeString(),
+          seats: currentStep === 'seats' ? [] : state.selectedSeats,
+          result: '실패 (시간 초과)',
+          venue: selectedVenue?.name
+        }
+      });
+      
+      // 실패 화면으로 전환
+      setCurrentStep('failed');
+    }
+  }, [state.timeLeft, currentStep, dispatch, state.selectedSeats, selectedVenue]);
   
   // 티켓팅 설정 불러오기
   const loadEventSettings = useCallback(async () => {
@@ -116,7 +170,7 @@ const TicketingPage = () => {
         setCurrentStep('waiting');
       }
     }
-  }, [loadEventSettings, selectedVenue, selectedDifficulty]);
+  }, [loadEventSettings, selectedVenue, selectedDifficulty, dispatch, state.event]);
   
   // 대기열에서 입장 처리
   const handleEnterFromWaiting = useCallback(() => {
@@ -199,87 +253,14 @@ const TicketingPage = () => {
   
   // 다시 시작
   const handleRestart = useCallback(() => {
+    // 토스트 메시지 모두 닫기
+    toast.dismiss();
+    
+    // 모든 상태 초기화
     dispatch({ type: 'RESET_STATE' });
+    dispatch({ type: 'SET_ACTIVE', payload: false });
     setCurrentStep('setup');
   }, [dispatch]);
-  
-  // 타임아웃 처리
-  useEffect(() => {
-    if (state.timeLeft === 0 && state.isActive) {
-      // 타임아웃 설정
-      dispatch({ type: 'SET_TIMEOUT', payload: true });
-      
-      if (currentStep === 'seats') {
-        // 좌석 선택 시간 초과 시
-        toast.error('시간이 초과되었습니다! 예매 실패입니다!', {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: false,
-          progress: undefined,
-          style: {
-            background: "#ff3333",
-            color: "white",
-            fontSize: "16px",
-            fontWeight: "bold",
-            textAlign: "center",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
-          },
-        });
-        
-        // 실패 기록 저장
-        dispatch({
-          type: 'SAVE_HISTORY',
-          payload: {
-            date: new Date().toLocaleDateString(),
-            time: new Date().toLocaleTimeString(),
-            seats: [],
-            result: '실패 (시간 초과)',
-            venue: selectedVenue?.name
-          }
-        });
-        
-        // 실패 화면 표시
-        setCurrentStep('failed');
-        
-      } else if (currentStep === 'payment') {
-        // 결제 시간 초과 시
-        toast.error('결제 시간이 초과되었습니다! 예매 실패입니다!', {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: false,
-          style: {
-            background: "#ff3333",
-            color: "white",
-            fontSize: "16px",
-            fontWeight: "bold",
-            textAlign: "center",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
-          },
-        });
-        
-        // 실패 기록 저장
-        dispatch({
-          type: 'SAVE_HISTORY',
-          payload: {
-            date: new Date().toLocaleDateString(),
-            time: new Date().toLocaleTimeString(),
-            seats: state.selectedSeats,
-            result: '실패 (시간 초과)',
-            venue: selectedVenue?.name
-          }
-        });
-        
-        // 실패 화면 표시
-        setCurrentStep('failed');
-      }
-    }
-  }, [state.timeLeft, state.isActive, currentStep, state.selectedSeats, dispatch, selectedVenue]);
   
   // 현재 단계에 따른 컴포넌트 렌더링
   const renderCurrentStep = () => {
@@ -404,7 +385,7 @@ const TicketingPage = () => {
             </div>
           </>
         );
-        
+      
       case 'failed':
         return (
           <div className="failed-container">
@@ -419,10 +400,10 @@ const TicketingPage = () => {
             <p className="failed-tip">Tip: 시간 제한이 있는 티켓팅에서는 빠른 결정이 중요합니다.</p>
             
             <div className="action-buttons">
-              <button className="restart-button" onClick={() => {
-                dispatch({ type: 'SET_TIMEOUT', payload: false });
-                handleRestart();
-              }}>
+              <button 
+                className="restart-button" 
+                onClick={handleRestart}
+              >
                 다시 연습하기
               </button>
             </div>

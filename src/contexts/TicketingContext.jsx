@@ -49,11 +49,12 @@ function ticketingReducer(state, action) {
       };
     
     case 'TICK_TIMER':
+      // 타이머가 0이 되면 타이머를 멈춤
+      const newTimeLeft = Math.max(0, state.timeLeft - 1);
       return { 
         ...state, 
-        timeLeft: Math.max(0, state.timeLeft - 1),
-        // 타이머가 0이 되면 활성 상태를 false로 설정
-        isActive: state.timeLeft <= 1 ? false : state.isActive
+        timeLeft: newTimeLeft,
+        isActive: newTimeLeft > 0 ? state.isActive : false
       };
     
     case 'RESET_TIMER':
@@ -173,24 +174,12 @@ export const TicketingProvider = ({ children }) => {
       timer = setInterval(() => {
         dispatch({ type: 'TICK_TIMER' });
       }, 1000);
-    } else if (state.timeLeft === 0) {
-      // 타임아웃 처리
-      dispatch({ 
-        type: 'SAVE_HISTORY', 
-        payload: {
-          date: new Date().toLocaleDateString(),
-          time: new Date().toLocaleTimeString(),
-          seats: state.selectedSeats,
-          result: '실패 (시간 초과)'
-        }
-      });
-      dispatch({ type: 'RESET_SELECTION' });
     }
     
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [state.isActive, state.timeLeft, state.selectedSeats]);
+  }, [state.isActive, state.timeLeft]);
   
   return (
     <TicketingContext.Provider value={{ state, dispatch }}>
