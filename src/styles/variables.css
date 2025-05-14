@@ -1,0 +1,97 @@
+:root {
+  /* 색상 팔레트 */
+  --color-primary: #3cff8f;
+  --color-primary-dark: #1fae5b;
+  --color-primary-light: #7affb2;
+  --color-secondary: #5271ff;
+  --color-accent: #ff5e87;
+  --color-warning: #ff4d4d;
+  --color-success: #3cff8f;
+  
+  /* 중립 색상 */
+  --color-background: #181a1b;
+  --color-surface: #232526;
+  --color-surface-variant: #2a2d2e;
+  --color-text-primary: #f5f6fa;
+  --color-text-secondary: #a0a0a0;
+  --color-text-disabled: #6c6c6c;
+  --color-border: #444;
+  --color-divider: #333;
+  
+  /* 좌석 등급별 색상 */
+  --color-seat-vip: #ffbf00;
+  --color-seat-r: #ff5e87;
+  --color-seat-s: #3d9bff;
+  --color-seat-a: #5ddb5d;
+  --color-seat-b: #a797ff;
+  
+  /* 그림자 */
+  --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-large: 0 8px 24px rgba(0, 0, 0, 0.25);
+  
+  /* 간격 */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  
+  /* 크기 */
+  --border-radius-sm: 6px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 18px;
+  --border-radius-xl: 24px;
+  
+  /* 글꼴 크기 */
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-md: 1rem;      /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+  --font-size-xxl: 1.5rem;   /* 24px */
+  --font-size-xxxl: 2rem;    /* 32px */
+  
+  /* 글꼴 두께 */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* 애니메이션 */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s ease;
+  
+  /* Z-인덱스 레이어 */
+  --z-layer-1: 10;
+  --z-layer-2: 20;
+  --z-layer-3: 30;
+  --z-layer-modal: 100;
+  --z-layer-toast: 200;
+  
+  /* 레이아웃 */
+  --header-height: 80px;
+  --footer-height: 60px;
+  --max-content-width: 1280px;
+  --sidebar-width: 280px;
+}
+
+/* 라이트 테마 변수 (다크 모드 토글 시 사용) */
+[data-theme="light"] {
+  --color-background: #f5f6fa;
+  --color-surface: #ffffff;
+  --color-surface-variant: #f0f0f0;
+  --color-text-primary: #2a2d2e;
+  --color-text-secondary: #505050;
+  --color-text-disabled: #a0a0a0;
+  --color-border: #e0e0e0;
+  --color-divider: #eaeaea;
+  
+  /* 그림자 (라이트 모드에서는 약간 더 연하게) */
+  --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-large: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
