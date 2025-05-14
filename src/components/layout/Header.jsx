@@ -57,7 +57,7 @@ const Header = () => {
           </ul>
         </nav>
         
-        <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+        <button className="mobile-menu-toggle" onClick={toggleMobileMenu} aria-label="메뉴 열기">
           <span></span>
           <span></span>
           <span></span>

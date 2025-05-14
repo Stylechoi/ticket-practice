@@ -131,31 +131,34 @@
 
   .header-container {
     padding: 0 1rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
   
   .logo {
     font-size: 1.2rem;
+    margin-right: auto;
   }
   
   .logo-icon {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
   
   .server-time {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: static;
+    transform: none;
     font-size: 0.8rem;
     min-width: auto;
     white-space: nowrap;
     padding: 0.25rem 0.5rem;
-    z-index: 1;
+    margin-right: 1rem;
+    order: 2;
   }
   
   .mobile-menu-toggle {
     display: flex;
-    margin-left: auto;
+    order: 3;
   }
   
   .main-nav {
