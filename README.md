@@ -3,7 +3,7 @@
 실제 티켓팅 환경을 시뮬레이션하여 티켓팅 연습을 할 수 있는 웹 애플리케이션입니다.
 
 ## 🌐 배포된 사이트
-https://ticket-practice-peach.vercel.app/
+https://ticket82.vercel.app/
 
 ## ✨ 주요 기능
 
